@@ -2,7 +2,7 @@
 
 chai.use(require('chai-sorted'))
 const { _, $, R } = Cypress
-import { really, invoke } from 'cypress-should-really'
+import { really, map, invoke } from 'cypress-should-really'
 
 // const toDate = string => new Date(string)
 // const toDate = R.constructN(1, Date) // the two are equivalent
@@ -111,7 +111,8 @@ it('gets sorted sorted by date, using should really chainer arguments', () => {
 // reusable data transformation function
 const fn = R.pipe(
   $.makeArray,
-  R.map(R.prop('innerText')), 
+  // R.map(R.prop('innerText')), 
+  map('innerText'), 
   R.map(R.constructN(1, Date) ),
   R.map(R.invoker(0, 'getTime')),
 )

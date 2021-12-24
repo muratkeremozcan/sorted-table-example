@@ -2,7 +2,7 @@
 
 // use functional utilities from this NPM library
 // https://github.com/bahmutov/cypress-should-really
-import { invoke, map, toDate, pipe, tap, really } from 'cypress-should-really'
+import { invoke, map, pipe, tap, really } from 'cypress-should-really'
 
 // https://www.chaijs.com/plugins/chai-sorted/
 chai.use(require('chai-sorted'))
@@ -48,12 +48,12 @@ it('gets sorted sorted by date, using pipe', () => {
   cy.contains('button', 'Sort by date').click()
 
   const fn = pipe(
-    map('innerText'), 
+    map('innerText'),
     map(toDate),
     // tap(console.log),
-    invoke('getTime')
+    invoke('getTime'),
   )
-  
+
   cy.get('tbody td:nth-child(2)').should(($cells) => {
     // The function fn constructed above is sitting, waiting for data. Once the data is passed in,
     // the fn($cells) is computed and passed to the assertion expect(...).to ... for evaluation.
@@ -70,11 +70,7 @@ it('gets sorted sorted by date, using should really', () => {
   cy.contains('button', 'Sort by date').click()
 
   cy.get('tbody td:nth-child(2)').should(
-    really(
-      map('innerText'), 
-      map(toDate), 
-      invoke('getTime'), 
-      'be.ascending'),
+    really(map('innerText'), map(toDate), invoke('getTime'), 'be.ascending'),
   )
 })
 
@@ -84,14 +80,9 @@ it('gets sorted sorted by date, using should really chainer arguments', () => {
   cy.contains('button', 'Sort by date').click()
 
   cy.get('tbody td:nth-child(2)').should(
-    really(
-      map('innerText'), 
-      map(toDate), 
-      invoke('getTime'), 
-      'be.sorted', {
-        descending: false     
-      }
-    )
+    really(map('innerText'), map(toDate), invoke('getTime'), 'be.sorted', {
+      descending: false,
+    }),
   )
 })
 

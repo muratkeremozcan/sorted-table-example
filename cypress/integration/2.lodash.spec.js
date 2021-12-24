@@ -30,7 +30,7 @@ it('gets sorted by date', () => {
     })
 })
 
-it.skip('gets sorted by date - fails without hard wait', () => {
+it('gets sorted by date - fails without hard wait', () => {
   cy.contains('button', 'Sort by date').click().wait(3000) // fails without it
   cy.get('tbody td:nth-child(2)')
     .should('have.length', 4)
