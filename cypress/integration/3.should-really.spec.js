@@ -2,7 +2,15 @@
 
 // use functional utilities from this NPM library
 // https://github.com/bahmutov/cypress-should-really
-import { invoke, map, pipe, tap, really } from 'cypress-should-really'
+import {
+  invoke,
+  map,
+  pipe,
+  toDate,
+  tap,
+  construct,
+  really,
+} from 'cypress-should-really'
 
 // https://www.chaijs.com/plugins/chai-sorted/
 chai.use(require('chai-sorted'))
@@ -49,8 +57,8 @@ it('gets sorted sorted by date, using pipe', () => {
 
   const fn = pipe(
     map('innerText'),
-    map(toDate),
-    // tap(console.log),
+    map(construct(Date)),
+    tap(console.log),
     invoke('getTime'),
   )
 

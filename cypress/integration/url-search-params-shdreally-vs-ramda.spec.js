@@ -1,5 +1,5 @@
 /// <reference types="cypress" />
-import { construct, invoke, pipe, tap, really } from 'cypress-should-really'
+import { construct, invoke, pipe, really } from 'cypress-should-really'
 const { _, $, R } = Cypress
 
 describe('how to use cy.location', () => {
@@ -109,16 +109,14 @@ describe('FP', () => {
     const searchToPlain = pipe(
       construct(URLSearchParams), // string
       invoke('entries'), // Iterable<[string, string]>
-      tap(console.log),
       Array.from, // Array<[string, string]>
-      tap(console.log),
       _.fromPairs, // { [key: string]: string }
     )
 
     // the pipe takes all individual unary functions and creates a pipeline function
     // that just waits for the data from the cy.location(‘search’) command
 
-    it.skip('(sub step)', () => {
+    it('(sub step that explains the transition)', () => {
       cy.visit(
         'https://example.cypress.io/commands/location?search=value&id=1234',
       )
@@ -152,28 +150,31 @@ describe('FP', () => {
 
   context('using Ramda', () => {
     const searchToPlain_R = R.pipe(
-      R.construct(URLSearchParams), // string
+      R.constructN(1, URLSearchParams), // string , note that tis isn't interchangeable with R.construct(URLSearchParams)
       R.invoker(0, 'entries'), // Iterable<[string, string]>
-      R.tap(console.log),
-      Array.from, // how do we make Array.from in Ramda?
-      R.tap(console.log),
+      Array.from, // Array<[string, string]>
       _.fromPairs, //  { [key: string]: string }
     )
 
-    it('(sub step)', () => {
+    it('Ramda is a bit more verbose that should really, and the really syntax enables even further conciseness', () => {
       cy.visit(
         'https://example.cypress.io/commands/location?search=value&id=1234',
       )
 
       cy.location('search').should((search) => {
-        // expect(
-        searchToPlain_R(search)
-        // )
-        // .to.deep.equal({
-        //   search: 'value',
-        //   id: '1234',
-        // })
+        expect(searchToPlain_R(search)).to.deep.equal({
+          search: 'value',
+          id: '1234',
+        })
       })
+
+      // use really from cypress-should-really
+      cy.location('search').should(
+        really(searchToPlain_R, 'deep.equal', {
+          search: 'value',
+          id: '1234',
+        }),
+      )
     })
   })
 })
