@@ -80,7 +80,7 @@ const store = {
   updatedAt: 1640788367429,
 }
 
-it.only('big object: filter by key = value', () => {
+it('big object: filter by key = value', () => {
   // creates an object of all keys that predicate returns truthy for
   cy.wrap(_.pickBy(store, (k) => k === true)).should('exist')
 
