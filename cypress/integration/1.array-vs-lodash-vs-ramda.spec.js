@@ -87,9 +87,13 @@ it('big object: filter by key = value', () => {
   const pickEnabled = _.pick(store, 'enabled')
   cy.wrap(_.filter(pickEnabled, (k) => k === true)).should('have.length', 1)
 
-  /**  creates an array of specified key value pair */
-  const filterByKeyValue = (key, value, obj) =>
-    _.filter(_.pick(obj, key), (v) => v === value)
+  /**  checks if a key value exists */
+  const keyValueExists = (key, value, obj) =>
+    Boolean(_.filter(_.pick(obj, key), (v) => v === value).length)
 
-  cy.wrap(filterByKeyValue('enabled', true, store)).should('have.length', 1)
+  cy.wrap(keyValueExists('currencyCode', 'USD', store)).should('eq', true)
+  cy.wrap(keyValueExists('platform', 'shopify', store)).should('eq', true)
+
+  cy.wrap(keyValueExists('currencyCode', 'CAD', store)).should('eq', false)
+  cy.wrap(keyValueExists('foo', 'bar', store)).should('eq', false)
 })
