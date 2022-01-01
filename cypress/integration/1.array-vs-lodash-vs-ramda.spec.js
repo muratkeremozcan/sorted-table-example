@@ -81,7 +81,7 @@ context('check if a key value pair exists in an object', () => {
     updatedAt: 1640788367429,
   }
 
-  it('easier way to check if a prop exists in an object using key in obj', () => {
+  it('easy way to check if a prop exists in an object using key in obj', () => {
     const keyValueExists = (key, value, obj) => key in obj && obj[key] === value
 
     cy.wrap(keyValueExists('currencyCode', 'USD', store)).should('eq', true)
